@@ -1,17 +1,32 @@
-# GitHub Resume Generator - Gemini API x CrewAI
+# Multi-agent Research Assistant - Gemini API x LlamaIndex
 
-Use the [Gemini API](https://ai.google.dev/gemini-api/) and [CrewAI](https://crewai.com)
-to generate a CV/Resume from a GitHub profile, using CrewAI to manage
-a crew of agents, and using the Gemini API with Google Search Grounding to
-research and write the content.
+Use the [Gemini API](https://ai.google.dev/gemini-api/) and [LlamaIndex](https://www.llamaindex.ai/)
+to build a multi-agent workflow for a Research Agent.
 
-## Demo
+
+This app defines a simple agent crew:
+
+- **ResearchAgent**: uses Google Search to gather relevant information.
+- **SummarizeAgent**: summarizes the research findings into a concise explanation.
+
+All reasoning is done using Gemini 2.5 Pro. Search is powered by Gemini’s built-in [Google Search Tool](https://ai.google.dev/gemini-api/docs/grounding).
+
+
+## 🧠 What it does
+
+You ask a question like:
+> "What are the key steps in quantum computing?"
+
+The ResearchAgent looks it up via the web, then hands findings to the SummarizeAgent to generate a plain-English summary.
+
+
+<!-- ## Demo
 
 ![Demo of GitHub Resume Generator](assets/demo.gif)
 
-*The app in action: Enter a GitHub username and watch as AI agents research and generate a professional resume*
+*The app in action: Enter a GitHub username and watch as AI agents research and generate a professional resume* -->
 
-## How it works
+<!-- ## How it works
 
 A crew is defined that follows a short plan:
 
@@ -38,7 +53,7 @@ message with the resume, in markdown.
 
 The web frontend is just a static HTML page that calls the API and renders
 updates. If you want to develop something more complex, the API is serving the
-HTML as a static route, so you can deploy a separate web app pointed at the API.
+HTML as a static route, so you can deploy a separate web app pointed at the API. -->
 
 ## Installation
 
@@ -71,11 +86,7 @@ cp .env.example .env
 # Now edit .env and add add your key to the GEMINI_API_KEY line.
 ```
 
-You can now choose to run the API service locally or with Docker. Read one of
-the the next two sections depending on what you prefer. Docker will need to be
-installed, or just run locally using the already-installed tools.
-
-### Run locally
+You can now choose to run the API service locally.
 
 Run the service. Use `--reload` to automatically refresh while you're editing.
 
@@ -84,30 +95,6 @@ uv run uvicorn api.service:app --reload
 ```
 
 With the API server running, browse to http://localhost:8000/
-
-### Docker
-
-To build and run a docker image locally, using a specified API key:
-
-```bash
-docker build -t resume-generator-backend-local:latest .
-docker run -p 8000:8080 -e GEMINI_API_KEY=your_api_key_here --name my-resume-generator-app-local resume-generator-backend-local:latest
-```
-
-With the API server running, browse to the docker port, http://localhost:8080/
-
-The Docker container can also be deployed directly to [Google Cloud Run](https://cloud.google.com/run).
-
-## Running the Crew
-
-To run your crew of AI agents directly, without an API server, run this from the root folder of your project. Pass your GitHub username as the last argument to generate their resume.
-
-```bash
-uv run github_resume_generator yourgithubusername
-```
-
-You will get a markdown file created in the same directory, `yourgithubusername_resume.md`. Load it in your favourite markdown renderer, e.g. [`glow`](https://github.com/charmbracelet/glow).
-
 
 ## Disclaimer
 
