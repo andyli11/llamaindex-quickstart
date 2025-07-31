@@ -1,104 +1,114 @@
-# Multi-agent Research Assistant - Gemini API x LlamaIndex
+# Ask Anything: Gemini + LlamaIndex RAG System
 
-Use the [Gemini API](https://ai.google.dev/gemini-api/) and [LlamaIndex](https://www.llamaindex.ai/)
-to build a multi-agent workflow for a Research Agent.
+A powerful RAG (Retrieval-Augmented Generation) system that combines your documents with web search capabilities, powered by Google's Gemini API and LlamaIndex.
 
+## 🎯 What it does
 
-This app defines a simple agent crew:
+Load any content (PDFs, images, URLs, or text) and ask questions about it. When information isn't found in your documents, the system automatically offers to search the web or use Gemini's general knowledge.
 
-- **ResearchAgent**: uses Google Search to gather relevant information.
-- **SummarizeAgent**: summarizes the research findings into a concise explanation.
+**Smart Fallback Chain:**
+1. **RAG Search** → Query your loaded documents first
+2. **Google Search** → Search the web if information not found (when quota available)
+3. **Gemini Direct** → Use Gemini's knowledge as final fallback
 
-All reasoning is done using Gemini 2.5 Pro. Search is powered by Gemini’s built-in [Google Search Tool](https://ai.google.dev/gemini-api/docs/grounding).
+## ✨ Key Features
 
+- **Multi-format Support**: PDFs, images, web URLs, and plain text
+- **Auto-summarization**: Get a brief summary of your content before Q&A
+- **Smart Detection**: Automatically detects when answers aren't in your documents
+- **Web Search Integration**: Google Search tool with graceful quota handling
+- **Gemini Vision**: OCR text extraction from images
+- **100% Gemini**: Uses Gemini for both LLM and embeddings
+- **Graceful Exits**: Handle Ctrl+C, Ctrl+D, 'exit', or 'quit'
 
-## 🧠 What it does
-
-You ask a question like:
-> "What are the key steps in quantum computing?"
-
-The ResearchAgent looks it up via the web, then hands findings to the SummarizeAgent to generate a plain-English summary.
-
-
-<!-- ## Demo
-
-![Demo of GitHub Resume Generator](assets/demo.gif)
-
-*The app in action: Enter a GitHub username and watch as AI agents research and generate a professional resume* -->
-
-<!-- ## How it works
-
-A crew is defined that follows a short plan:
-
-* Research the user's GitHub profile
-* Research any projects from the profile
-* Generate a CV/Resume in Markdown format
-
-You can see the CrewAI configuration in [the config
-dir](src/github_resume_generator/config/). Also check out the [custom LLM
-class](src/github_resume_generator/crew.py) that uses the `google_search` tool
-with CrewAI.
-
-The agents all use the Gemini API, by default [Gemini 2.5
-Flash](https://ai.google.dev/gemini-api/docs/models#gemini-2.5-flash-preview).
-The agent defined for the research task uses the Gemini API's [Google Search
-Grounding](https://ai.google.dev/gemini-api/docs/grounding) feature to look up
-any relevant information on the supplied user's GitHub profile. This is easy to
-implement, runs pretty quickly and can grab any relevant GitHub information from
-around the web.
-
-The Crew is wrapped in a FastAPI that serves a streaming endpoint. This API
-streams progress updates to indicate as tasks complete, and eventually returns a
-message with the resume, in markdown.
-
-The web frontend is just a static HTML page that calls the API and renders
-updates. If you want to develop something more complex, the API is serving the
-HTML as a static route, so you can deploy a separate web app pointed at the API. -->
-
-## Installation
-
-This project uses [UV](https://docs.astral.sh/uv/) for Python dependency management and package handling.
-
-### Initial setup
-
-First, if you haven't already, install `uv`:
+## 🚀 Usage
 
 ```bash
-pipx install uv
+python3 src/main.py [pdf|image|url|text] <input>
 ```
 
-> [!NOTE]
-> Check out the extensive list of [`uv` installation options](https://docs.astral.sh/uv/getting-started/installation/#installation-methods), including instructions for macOS, Windows, Docker and more.
-
-Next, navigate to your project directory and install the dependencies:
-
+**Examples:**
 ```bash
-uv sync
+# Analyze a PDF document
+python3 src/main.py pdf "/path/to/document.pdf"
+
+# Extract text from an image and ask questions
+python3 src/main.py image "/path/to/screenshot.png"
+
+# Load content from a webpage
+python3 src/main.py url "https://example.com/article"
+
+# Analyze plain text
+python3 src/main.py text "Your text content here"
 ```
 
-#### API key
+**Sample Session:**
+```
+📄 Processing your content...
 
-Grab an API key from [Google AI Studio](https://aistudio.google.com/apikey) and
-add it to the `.env` file as `GEMINI_API_KEY`.
+📋 Summary:
+The document discusses artificial intelligence developments and their impact on various industries.
 
-```bash
-cp .env.example .env
-# Now edit .env and add add your key to the GEMINI_API_KEY line.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ask a question (or type 'exit' or 'quit' to stop):
+> What are the main AI applications mentioned?
+
+The document mentions healthcare, finance, and transportation as key AI applications...
+
+> How old is the CEO of OpenAI?
+
+⚠️  Information not found in the provided text.
+Would you like to search the web instead? (y/n): y
+
+🔍 Searching Google...
+💡 Gemini says: Sam Altman was born on April 22, 1985, making him 38 years old as of 2024.
 ```
 
-You can now choose to run the API service locally.
+## 📦 Installation
 
-Run the service. Use `--reload` to automatically refresh while you're editing.
+This project uses [UV](https://docs.astral.sh/uv/) for dependency management.
 
-```bash
-uv run uvicorn api.service:app --reload
-```
+### Setup
 
-With the API server running, browse to http://localhost:8000/
+1. **Install UV:**
+   ```bash
+   pipx install uv
+   ```
 
-## Disclaimer
+2. **Install dependencies:**
+   ```bash
+   uv sync
+   ```
 
-This is not an officially supported Google product. This project is not eligible for the [Google Open Source Software Vulnerability Rewards Program](https://bughunters.google.com/open-source-security).
+3. **Configure API key:**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your GEMINI_API_KEY
+   ```
 
-This project is intended for demonstration purposes only. It is not intended for use in a production environment.
+   Get your API key from [Google AI Studio](https://aistudio.google.com/apikey).
 
+## 🔧 Technical Details
+
+**Architecture:**
+- **LLM**: Gemini 1.5 Flash via `GoogleGenAI`
+- **Embeddings**: Gemini `text-embedding-004` via `GoogleGenAIEmbedding`
+- **Vector Store**: LlamaIndex in-memory vector store
+- **Search**: Google Search tool (with quota-aware fallback)
+- **Vision**: Gemini multimodal for image text extraction
+
+**Supported Formats:**
+- **PDF**: PyMuPDFReader for document parsing
+- **Images**: PIL + Gemini Vision for OCR
+- **URLs**: SimpleWebPageReader for web content
+- **Text**: Direct text input
+
+## 🔒 Privacy & Quota
+
+- **Google Search**: Requires quota/billing for web search functionality
+- **Quota Handling**: Graceful fallback to Gemini's knowledge when search quota exceeded
+- **Data**: All processing uses Google's APIs (see their privacy policies)
+
+## ⚠️ Disclaimer
+
+This is not an officially supported Google product. Intended for demonstration purposes only.
