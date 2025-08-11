@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LlamaIndex RAG System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦙 Ask Anything: Gemini + LlamaIndex RAG System</h1>
+            <p>Upload documents, images, or provide URLs/text to ask questions about your content</p>
+        </header>
+
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-options">
+                <div class="upload-method active" data-method="file">
+                    <h3>📄 Upload File</h3>
+                    <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.tiff" />
+                    <p>Support: PDF documents and images</p>
+                </div>
+                
+                <div class="upload-method" data-method="url">
+                    <h3>🌐 Web URL</h3>
+                    <input type="url" id="urlInput" placeholder="https://example.com/article" />
+                    <button onclick="processUrl()">Load URL</button>
+                </div>
+                
+                <div class="upload-method" data-method="text">
+                    <h3>📝 Text Input</h3>
+                    <textarea id="textInput" placeholder="Paste your text content here..."></textarea>
+                    <button onclick="processText()">Process Text</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="processing" id="processing" style="display: none;">
+            <div class="spinner"></div>
+            <p>Processing your content...</p>
+        </div>
+
+        <div class="content-info" id="contentInfo" style="display: none;">
+            <div class="action-buttons">
+                <button onclick="restartSession()" class="restart-btn">🏠 Start Over</button>
+                <button onclick="showAddContextModal()" class="add-context-btn">➕ Add More Context</button>
+            </div>
+            
+            <div class="summary-section">
+                <h3>📋 Summary</h3>
+                <div id="summaryContent"></div>
+            </div>
+            
+            <div class="chat-section">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-section">
+                    <div class="input-container">
+                        <input type="text" id="questionInput" placeholder="Ask a question about your content..." />
+                        <button onclick="askQuestion()" id="askButton">Ask</button>
+                    </div>
+                    <div class="web-search-prompt" id="webSearchPrompt" style="display: none;">
+                        <p>⚠️ Information not found in your content. Search the web instead?</p>
+                        <button onclick="searchWeb()" class="search-web-btn">🔍 Search Web</button>
+                        <button onclick="hideWebSearchPrompt()" class="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Context Modal -->
+        <div class="modal-overlay" id="addContextModal" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>➕ Add Additional Context</h3>
+                    <button onclick="hideAddContextModal()" class="close-btn">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="context-options">
+                        <div class="context-method active" data-method="file">
+                            <h4>📄 Upload Another File</h4>
+                            <input type="file" id="contextFileInput" accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.tiff" />
+                        </div>
+                        
+                        <div class="context-method" data-method="url">
+                            <h4>🌐 Add Web URL</h4>
+                            <input type="url" id="contextUrlInput" placeholder="https://example.com/article" />
+                            <button onclick="addContextUrl()">Add URL</button>
+                        </div>
+                        
+                        <div class="context-method" data-method="text">
+                            <h4>📝 Add Text</h4>
+                            <textarea id="contextTextInput" placeholder="Add more text content..."></textarea>
+                            <button onclick="addContextText()">Add Text</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

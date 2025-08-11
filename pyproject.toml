@@ -5,6 +5,8 @@ description = "Ask Anything: Gemini + LlamaIndex quickstart project"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "flask>=3.0.0",
+    "flask-cors>=4.0.0",
     "google-genai>=1.27.0",
     "google-generativeai>=0.8.5",
     "html2text>=2024.2.26",

@@ -83,6 +83,8 @@ def generate_summary(documents, input_type):
             prompt = "Provide a brief 2-3 sentence summary of this PDF document:"
         elif input_type == "url":
             prompt = "Provide a brief 2-3 sentence summary of this webpage content:"
+        elif input_type == "mixed":
+            prompt = "Provide a brief 2-3 sentence summary of this combined content from multiple sources:"
         else:
             prompt = "Provide a brief 2-3 sentence summary of this text:"
         
@@ -91,6 +93,33 @@ def generate_summary(documents, input_type):
         return response.text
     except Exception as e:
         return f"Could not generate summary: {str(e)}"
+
+
+def generate_preview(documents, source_description):
+    """Generate a brief preview of document content for display."""
+    try:
+        combined_text = ""
+        for doc in documents:
+            combined_text += doc.text + "\n\n"
+        
+        # Truncate to first 300 characters for preview
+        preview_text = combined_text.strip()[:300]
+        if len(combined_text.strip()) > 300:
+            preview_text += "..."
+        
+        return {
+            'source': source_description,
+            'text_preview': preview_text,
+            'character_count': len(combined_text.strip()),
+            'document_count': len(documents)
+        }
+    except Exception as e:
+        return {
+            'source': source_description,
+            'text_preview': f"Error generating preview: {str(e)}",
+            'character_count': 0,
+            'document_count': len(documents) if documents else 0
+        }
 
 
 def search_web_with_google(query):

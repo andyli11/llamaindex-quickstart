@@ -23,6 +23,21 @@ Load any content (PDFs, images, URLs, or text) and ask questions about it. When 
 
 ## 🚀 Usage
 
+### Web Interface (Recommended)
+
+Start the web server:
+```bash
+python3 src/app.py
+```
+
+Then open your browser to `http://localhost:5000` and enjoy the interactive web interface with:
+- Drag & drop file uploads
+- URL content loading
+- Real-time chat interface
+- Automatic web search fallback
+
+### Command Line Interface
+
 ```bash
 python3 src/main.py [pdf|image|url|text] <input>
 ```
