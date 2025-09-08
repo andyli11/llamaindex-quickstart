@@ -37,6 +37,11 @@ Load any content (PDFs, images, URLs, or text) and ask questions about it. When 
 
 ### Web Interface (Recommended)
 
+
+https://github.com/user-attachments/assets/207b5f9c-7416-4dd4-825e-4f1888c372ba
+
+
+
 Start the web server:
 ```bash
 python3 src/app.py
