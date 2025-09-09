@@ -1,4 +1,124 @@
-# Ask Anything: Gemini + LlamaIndex RAG System
+# GSoC 2025 — Enhance Gemini API Integrations in OSS Agent Tools
+
+> **Author:** Andy Li  ·  **Mentors:** Paige Bailey, Philipp Schmid  ·  **Program:** Google Summer of Code 2025
+---
+
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Week‑by‑Week Journey](#week-by-week-journey)
+3. [Technical Highlights (Concise)](#technical-highlights-concise)
+4. [Impact & Outcomes](#impact--outcomes)
+5. [Challenges & Lessons](#challenges--lessons)
+6. [Next Steps](#next-steps)
+7. [Acknowledgements](#acknowledgements)
+8. [License](#license)
+
+---
+
+## Project Overview
+
+This project set out to make the **Gemini API** feel first‑class in popular **agent frameworks**: easier to adopt, more predictable in production, and better documented. I focused on three pillars:
+
+* **Integration gaps**: Multimodal support, structured outputs, and tool/function calling that behave consistently across libraries.
+* **Developer ergonomics**: Clearer quickstarts, repeatable setups, and examples that mirror real agent patterns.
+* **Upstream sustainability**: Ship improvements as PRs so they live where developers already work.
+
+The result is a small stack of improvements and guides that help devs go from “hello world” to a robust agent that reasons, calls tools, and handles errors gracefully.
+
+---
+
+## Week by Week Journey
+
+### Community Bonding (early June)
+
+I aligned with mentors on scope, success metrics, and target frameworks. I audited the Gemini docs, AI Studio flows, and the current state of OSS agent ecosystems, then sketched a milestones map balancing breadth (multiple frameworks) with depth (production‑ready patterns).
+
+### Week 1 (Jun 16–20) — Foundations
+
+Set up environments (Python + Node), defined a repeatable project skeleton, and drafted an evaluation rubric: clarity of examples, correctness of structured outputs, tool‑calling reliability, and observability. Mapped “happy paths” for agents and the most common failure modes (timeouts, schema drift, token limits).
+
+### Week 2 (Jun 23–27) — Ecosystem Survey
+
+Compared LangChain/LangGraph, LlamaIndex, CrewAI, Composio, and others through small spikes. Documented rough edges (multimodal inputs, tool binding differences, streaming behavior, and auth ergonomics). Chose a minimal but representative set of use‑cases: routing, RAG, and multi‑agent coordination.
+
+### Week 3 (Jun 30–Jul 4) — Agent Routing Pattern
+
+Implemented a “smart email router” flow as an anchor pattern: classify → act → (optional) human‑in‑the‑loop. Replaced heuristics with model‑guided decisions and defined where tools should be invoked. Added trace hooks to observe latency and tool‑call frequency so changes were measurable.
+
+### Week 4 (Jul 7–11) — Documentation First
+
+Turned spikes into narrative quickstarts and cookbook entries. Tightened prompts and instructions so outputs were schema‑conformant by default. Wrote short “why it works” notes to explain decision boundaries (e.g., when to use Flash vs Pro, when to stream, how to surface actionable errors).
+
+### Week 5 (Jul 14–18) — Upstreaming & Ergonomics
+
+Opened PRs to improve examples and fix small inconsistencies discovered during testing. Standardized environment setup (using `uv` in Python), clarified error messages and key handling, and added checks to reduce common foot‑guns (missing keys, oversized inputs, silent fallbacks).
+
+### Week 6 (Jul 28–Aug 1) — RAG Pipeline
+
+Built a LlamaIndex RAG pipeline with Gemini for embeddings and generation. Focused on retrieval quality and developer experience: sensible chunking defaults, context injection, and a predictable interface for swapping models or vector stores without rewriting the app.
+
+### Week 7 (Aug 4–8) — Hardening
+
+Added guardrails around structured outputs and tool calling; documented retry strategies and when to fail fast. Introduced web‑fallback hooks and key‑usage checks. Wrote pytest coverage for critical paths, plus notes for observability (tracing prompts, tokens, and errors) to speed iteration.
+
+### Week 8 (Aug 11–15) — Shipping & Polish
+
+Packaged the examples into a coherent quickstart, addressed bug reports (memory usage, port conflicts, key validation, file size limits), and smoothed the README/Docs flow so a new dev can complete a full run end‑to‑end without guesswork. Captured learnings and drafted a short blog outline.
+
+---
+
+## Technical Highlights (Concise)
+
+* **Structured output by default**: Schemas for predictable, machine‑readable responses; fewer brittle post‑processing steps.
+* **Tool/function calling**: Consistent patterns across libraries with clear “when & how” guidance.
+* **Multimodal pipelines**: Text + images/files as first‑class citizens where frameworks support it.
+* **Observability**: Tracing prompts, tokens, latencies, and tool‑calls; fast feedback loops.
+* **DevX details**: Clean setup, helpful errors, and examples that match real production flows.
+
+---
+
+## Impact & Outcomes
+
+* **Merged PRs**
+
+  * `google-gemini/cookbook#853` — example/docs improvements.
+* **Active PRs**
+
+  * `google-gemini/gemini-api-quickstart#28`
+  * `google-gemini/crewai-quickstart#6` and `#7`
+* **Demo**
+
+  * `andyli11/llamaindex-quickstart` — a runnable app demonstrating RAG with context injection, summarization, key‑usage checks, and tests.
+
+These tighten the feedback loop for developers adopting Gemini in agents—moving friction out of the way so they can ship faster.
+
+---
+
+## Challenges & Lessons
+
+* **Library differences are real**: Tool binding, streaming, and multimodal support vary; the fix is clear, opinionated adapters and examples.
+* **Schemas reduce chaos**: Validated outputs minimize retries and hidden bugs.
+* **Observability is leverage**: Traces convert “it feels slow” into actionable changes.
+* **Docs drift quickly**: Examples must be small, correct, and tested to stay useful.
+
+---
+
+## Next Steps
+
+* Broaden **multimodal** paths (images → video; richer file toolchains).
+* Harden **Composio** + Gemini integration and ship an auth‑safe starter.
+* Publish **end‑to‑end templates** (LangGraph + HITL inbox + CI tests).
+* Turn the README narrative into a short **blog series** for wider reach.
+
+---
+
+## Acknowledgements
+
+Huge thanks to mentors **Paige Bailey** and **Philipp Schmid**, and to OSS maintainers who reviewed PRs and shared guidance throughout.
+
+# Final Project
+## Ask Anything: Gemini + LlamaIndex RAG System
 
 A powerful RAG (Retrieval-Augmented Generation) system that combines your documents with web search capabilities, powered by Google's Gemini API and LlamaIndex.
 
